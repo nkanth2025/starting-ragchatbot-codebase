@@ -5,7 +5,7 @@
     padding: 0;
 }
 
-/* CSS Variables */
+/* CSS Variables - Dark Theme (default) */
 :root {
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
@@ -22,6 +22,32 @@
     --focus-ring: rgba(37, 99, 235, 0.2);
     --welcome-bg: #1e3a5f;
     --welcome-border: #2563eb;
+    --code-bg: rgba(0, 0, 0, 0.2);
+    --link-color: #60a5fa;
+    --link-hover: #93c5fd;
+    --link-visited: #a78bfa;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --surface-hover: #f1f5f9;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --user-message: #2563eb;
+    --assistant-message: #f1f5f9;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --focus-ring: rgba(37, 99, 235, 0.2);
+    --welcome-bg: #eff6ff;
+    --welcome-border: #2563eb;
+    --code-bg: rgba(0, 0, 0, 0.05);
+    --link-color: #2563eb;
+    --link-hover: #1d4ed8;
+    --link-visited: #7c3aed;
 }
 
 /* Base Styles */
@@ -342,7 +368,7 @@ header h1 {
 }
 
 .message-content code {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--code-bg);
     padding: 0.125rem 0.25rem;
     border-radius: 3px;
     font-family: 'Fira Code', 'Consolas', monospace;
@@ -350,7 +376,7 @@ header h1 {
 }
 
 .message-content pre {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--code-bg);
     padding: 0.75rem;
     border-radius: 4px;
     overflow-x: auto;
@@ -391,20 +417,20 @@ header h1 {
     margin: 1rem 0;
 }
 
-/* Links in message content - dark mode friendly */
+/* Links in message content */
 .message-content a {
-    color: #60a5fa;
+    color: var(--link-color);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .message-content a:hover {
-    color: #93c5fd;
+    color: var(--link-hover);
     text-decoration: underline;
 }
 
 .message-content a:visited {
-    color: #a78bfa;
+    color: var(--link-visited);
 }
 
 /* Chat Input Container */
@@ -796,4 +822,55 @@ details[open] .suggested-header::before {
     .sidebar {
         width: 280px;
     }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    width: 100%;
+    padding: 0.5rem 0;
+    background: none;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-toggle:hover {
+    color: var(--primary-color);
+}
+
+.theme-toggle:focus {
+    outline: none;
+    color: var(--primary-color);
+}
+
+.theme-toggle svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Hide moon icon in dark mode, show sun icon */
+:root .theme-toggle .sun-icon {
+    display: none;
+}
+
+:root .theme-toggle .moon-icon {
+    display: inline-block;
+}
+
+/* Hide sun icon in light mode, show moon icon */
+[data-theme="light"] .theme-toggle .sun-icon {
+    display: inline-block;
+}
+
+[data-theme="light"] .theme-toggle .moon-icon {
+    display: none;
 }
