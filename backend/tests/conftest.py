@@ -1,4 +1,5 @@
 """Shared test fixtures for RAG chatbot tests."""
+
 import sys
 import os
 from dataclasses import dataclass
@@ -16,6 +17,7 @@ from vector_store import SearchResults
 @dataclass
 class TestConfig:
     """Test configuration with proper MAX_RESULTS value."""
+
     ANTHROPIC_API_KEY: str = "test-api-key"
     ANTHROPIC_MODEL: str = "claude-sonnet-4-20250514"
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
@@ -29,6 +31,7 @@ class TestConfig:
 @dataclass
 class BrokenConfig:
     """Configuration that mirrors the broken production config."""
+
     ANTHROPIC_API_KEY: str = "test-api-key"
     ANTHROPIC_MODEL: str = "claude-sonnet-4-20250514"
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
@@ -57,24 +60,23 @@ def sample_search_results():
     return SearchResults(
         documents=[
             "RAG stands for Retrieval-Augmented Generation. It combines retrieval with generation.",
-            "MCP is the Model Context Protocol for building AI applications."
+            "MCP is the Model Context Protocol for building AI applications.",
         ],
         metadata=[
-            {"course_title": "Advanced Retrieval for AI with Chroma", "lesson_number": 1},
-            {"course_title": "MCP: Build Rich-Context AI Apps", "lesson_number": 3}
+            {
+                "course_title": "Advanced Retrieval for AI with Chroma",
+                "lesson_number": 1,
+            },
+            {"course_title": "MCP: Build Rich-Context AI Apps", "lesson_number": 3},
         ],
-        distances=[0.25, 0.35]
+        distances=[0.25, 0.35],
     )
 
 
 @pytest.fixture
 def empty_search_results():
     """Provide empty search results."""
-    return SearchResults(
-        documents=[],
-        metadata=[],
-        distances=[]
-    )
+    return SearchResults(documents=[], metadata=[], distances=[])
 
 
 @pytest.fixture
@@ -90,8 +92,8 @@ def mock_vector_store(sample_search_results):
         "instructor": "Test Instructor",
         "lessons": [
             {"lesson_number": 1, "lesson_title": "Introduction"},
-            {"lesson_number": 2, "lesson_title": "Advanced Topics"}
-        ]
+            {"lesson_number": 2, "lesson_title": "Advanced Topics"},
+        ],
     }
     return mock_store
 
@@ -115,7 +117,7 @@ def mock_vector_store_zero_results():
         documents=[],
         metadata=[],
         distances=[],
-        error=None  # ChromaDB may return empty without error
+        error=None,  # ChromaDB may return empty without error
     )
     mock_store.max_results = 0  # The bug!
     return mock_store

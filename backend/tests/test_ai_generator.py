@@ -1,4 +1,5 @@
 """Tests for AIGenerator tool calling functionality."""
+
 import sys
 import os
 from unittest.mock import Mock, MagicMock, patch
@@ -16,7 +17,7 @@ class TestAIGeneratorToolCalling:
 
     def test_generate_response_passes_tools_to_api(self):
         """Test that tools are passed to the Anthropic API."""
-        with patch('ai_generator.anthropic.Anthropic') as mock_anthropic:
+        with patch("ai_generator.anthropic.Anthropic") as mock_anthropic:
             mock_client = Mock()
             mock_anthropic.return_value = mock_client
 
@@ -30,7 +31,13 @@ class TestAIGeneratorToolCalling:
             mock_client.messages.create.return_value = mock_response
 
             generator = AIGenerator("test-key", "test-model")
-            tools = [{"name": "search_course_content", "description": "Search", "input_schema": {}}]
+            tools = [
+                {
+                    "name": "search_course_content",
+                    "description": "Search",
+                    "input_schema": {},
+                }
+            ]
 
             generator.generate_response("What is RAG?", tools=tools)
 
@@ -41,7 +48,7 @@ class TestAIGeneratorToolCalling:
 
     def test_generate_response_handles_tool_use_response(self):
         """Test that tool use responses trigger tool execution."""
-        with patch('ai_generator.anthropic.Anthropic') as mock_anthropic:
+        with patch("ai_generator.anthropic.Anthropic") as mock_anthropic:
             mock_client = Mock()
             mock_anthropic.return_value = mock_client
 
@@ -72,18 +79,21 @@ class TestAIGeneratorToolCalling:
             mock_tool_manager.execute_tool.return_value = "Search results here"
 
             generator = AIGenerator("test-key", "test-model")
-            tools = [{"name": "search_course_content", "description": "Search", "input_schema": {}}]
+            tools = [
+                {
+                    "name": "search_course_content",
+                    "description": "Search",
+                    "input_schema": {},
+                }
+            ]
 
             result = generator.generate_response(
-                "What is RAG?",
-                tools=tools,
-                tool_manager=mock_tool_manager
+                "What is RAG?", tools=tools, tool_manager=mock_tool_manager
             )
 
             # Verify tool was executed
             mock_tool_manager.execute_tool.assert_called_once_with(
-                "search_course_content",
-                query="What is RAG?"
+                "search_course_content", query="What is RAG?"
             )
 
             # Verify final response is returned
@@ -91,7 +101,7 @@ class TestAIGeneratorToolCalling:
 
     def test_generate_response_without_tools(self):
         """Test that responses work without tools."""
-        with patch('ai_generator.anthropic.Anthropic') as mock_anthropic:
+        with patch("ai_generator.anthropic.Anthropic") as mock_anthropic:
             mock_client = Mock()
             mock_anthropic.return_value = mock_client
 
@@ -115,7 +125,7 @@ class TestAIGeneratorToolCalling:
 
     def test_generate_response_includes_conversation_history(self):
         """Test that conversation history is included in system prompt."""
-        with patch('ai_generator.anthropic.Anthropic') as mock_anthropic:
+        with patch("ai_generator.anthropic.Anthropic") as mock_anthropic:
             mock_client = Mock()
             mock_anthropic.return_value = mock_client
 
@@ -143,7 +153,7 @@ class TestAIGeneratorToolExecution:
 
     def test_handle_tool_execution_builds_correct_messages(self):
         """Test that tool execution builds correct message chain."""
-        with patch('ai_generator.anthropic.Anthropic') as mock_anthropic:
+        with patch("ai_generator.anthropic.Anthropic") as mock_anthropic:
             mock_client = Mock()
             mock_anthropic.return_value = mock_client
 
@@ -173,9 +183,17 @@ class TestAIGeneratorToolExecution:
             mock_tool_manager.execute_tool.return_value = "MCP content from search"
 
             generator = AIGenerator("test-key", "test-model")
-            tools = [{"name": "search_course_content", "description": "Search", "input_schema": {}}]
+            tools = [
+                {
+                    "name": "search_course_content",
+                    "description": "Search",
+                    "input_schema": {},
+                }
+            ]
 
-            generator.generate_response("What is MCP?", tools=tools, tool_manager=mock_tool_manager)
+            generator.generate_response(
+                "What is MCP?", tools=tools, tool_manager=mock_tool_manager
+            )
 
             # Check second API call has tool results
             second_call = mock_client.messages.create.call_args_list[1]
@@ -195,7 +213,7 @@ class TestAIGeneratorToolExecution:
 
     def test_tool_manager_not_called_without_tool_use(self):
         """Test that tool manager is not called for non-tool responses."""
-        with patch('ai_generator.anthropic.Anthropic') as mock_anthropic:
+        with patch("ai_generator.anthropic.Anthropic") as mock_anthropic:
             mock_client = Mock()
             mock_anthropic.return_value = mock_client
 
@@ -211,9 +229,17 @@ class TestAIGeneratorToolExecution:
             mock_tool_manager = Mock()
 
             generator = AIGenerator("test-key", "test-model")
-            tools = [{"name": "search_course_content", "description": "Search", "input_schema": {}}]
+            tools = [
+                {
+                    "name": "search_course_content",
+                    "description": "Search",
+                    "input_schema": {},
+                }
+            ]
 
-            generator.generate_response("Hello", tools=tools, tool_manager=mock_tool_manager)
+            generator.generate_response(
+                "Hello", tools=tools, tool_manager=mock_tool_manager
+            )
 
             # Tool manager should not be called
             mock_tool_manager.execute_tool.assert_not_called()
